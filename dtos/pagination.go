@@ -5,3 +5,4 @@ type Pagination struct {
 	TotalPage         int `json:"total_page"`
 	PageElementsCount int `json:"page_elements_count"`
 }
+

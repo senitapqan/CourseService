@@ -3,6 +3,7 @@ package service
 import (
 	"goCourseService/internal/repository"
 	"goCourseService/models"
+	"goCourseService/dtos"
 )
 
 type CourseService struct {
@@ -15,15 +16,15 @@ func NewCourseService(repos repository.Course) *CourseService {
 	}
 }
 
-func (s *CourseService) CreateCourse(input models.Course, teacherId int) error {
+func (s *CourseService) CreateCourse(input models.Course, teacherId int) (int, error) {
 	return s.repos.CreateCourse(input, teacherId)
 }
 
-func (s *CourseService) GetCourses() ([]models.Course, error) {
-	return s.repos.GetCourses()
+func (s *CourseService) GetCourses(page, limit int) ([]dtos.Course, dtos.Pagination, error) {
+	return s.repos.GetCourses(page, limit)
 }
 
-func (s *CourseService) GetCourseById(courseId int) (models.Course, error) {
+func (s *CourseService) GetCourseById(courseId int) (dtos.Course, error) {
 	return s.repos.GetCourseById(courseId)
 }
 

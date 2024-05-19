@@ -9,7 +9,7 @@ import (
 
 type RequestValidator interface {
 	ValidateId(c *gin.Context) (int, error) 
-	ValidatePage(c *gin.Context) (int, error) 
+	ValidatePage(c *gin.Context) (int, int, error) 
 }
 
 type requestValidator struct {}
@@ -32,16 +32,26 @@ func (v *requestValidator) ValidateId(c *gin.Context) (int, error) {
 }
 
 
-func (v *requestValidator) ValidatePage(c *gin.Context) (int, error) {
+func (v *requestValidator) ValidatePage(c *gin.Context) (int, int, error) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 
 	if err != nil {
-		return -1, errors.New("value of query parameter 'page' is not integer")
+		return -1, -1, errors.New("value of query parameter 'page' is not integer")
 	}
 
 	if page <= 0 {
-		return -1, errors.New("page need to be positive")
+		return -1, -1, errors.New("page need to be positive")
 	}
 
-	return page, nil
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+
+	if err != nil {
+		return -1, -1, errors.New("value of query parameter 'page' is not integer")
+	}
+
+	if limit <= 0 {
+		return -1, -1, errors.New("page need to be positive")
+	}
+
+	return page, limit, nil
 }
