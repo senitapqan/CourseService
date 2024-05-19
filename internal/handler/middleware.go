@@ -45,7 +45,7 @@ func (h *Handler) userIdentify() gin.HandlerFunc {
 			c.Next()
 		}
 
-
+		
 
 		if err != nil {
 			newErrorResponse(c, http.StatusUnauthorized, err.Error())

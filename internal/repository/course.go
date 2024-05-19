@@ -26,7 +26,7 @@ func (r *CourseRepository) CreateCourse(input models.Course, teacherId int) (int
 	var courseId int
 	query := fmt.Sprintf(`insert into %s (title, subtitle, description, teacher_id, teacher_full_name) 
 		values($1, $2, $3, $4, $5, $6) returning id`, consts.CourseTable)
-	
+
 	err := r.db.Get(&courseId, query, input.Title, input.Subtitle, input.Description, input.TeacherId, input.TeacherFullName)
 	if err != nil {
 		return -1, err
@@ -37,19 +37,19 @@ func (r *CourseRepository) CreateCourse(input models.Course, teacherId int) (int
 
 func (r *CourseRepository) GetCourses(page, limit int) ([]dtos.Course, dtos.Pagination, error) {
 	var courses []dtos.Course
-	query := fmt.Sprintf(`select c.title, c.subtitle, c.desription, c.teacher_full_name from %s c
+	query := fmt.Sprintf(`select c.title, c.subtitle, c.description, c.teacher_full_name from %s c
 			where c.draft = false
 			order by c.created_time desc
-			limit %d offset %d`, consts.CourseTable, limit, (page - 1) * limit)
-	
+			limit %d offset %d`, consts.CourseTable, limit, (page-1)*limit)
+
 	err := r.db.Select(&courses, query)
 	if err != nil {
 		return nil, dtos.Pagination{}, err
 	}
-	
+
 	query = fmt.Sprintf(`select count(*) from %s c
 			where c.draft = false`, consts.CourseTable)
-	
+
 	var totalRows int
 	err = r.db.Get(&totalRows, query)
 	if err != nil {
@@ -57,10 +57,10 @@ func (r *CourseRepository) GetCourses(page, limit int) ([]dtos.Course, dtos.Pagi
 	}
 
 	return courses, dtos.Pagination{
-			PageElementsCount: limit,
-			CurrentPage: page,
-			TotalPage: (totalRows + limit - 1) / limit,
-		}, nil
+		PageElementsCount: limit,
+		CurrentPage:       page,
+		TotalPage:         (totalRows + limit - 1) / limit,
+	}, nil
 }
 
 func (r *CourseRepository) GetCourseById(courseId int) (dtos.Course, error) {
