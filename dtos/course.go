@@ -16,6 +16,5 @@ type GetAllCoursesResponse struct {
 }
 
 type GetCourseById struct {
-	Data       Course     `json:"data"`
-	Pagination Pagination `json:"pagination"`
+	Data Course `json:"data"`
 }

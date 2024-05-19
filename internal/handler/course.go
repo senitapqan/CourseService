@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"goCourseService/models"
 	"goCourseService/dtos"
+	"goCourseService/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 
 func (h *Handler) CreateCourse(c *gin.Context) {
 	teacherId, _ := getId(c, teacherCtx)
-	
+
 	var input models.Course
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadGateway, err.Error())
@@ -36,11 +36,11 @@ func (h *Handler) GetCourses(c *gin.Context) {
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
-	
+
 	c.JSON(http.StatusOK, dtos.GetAllCoursesResponse{
 		Data:       courses,
 		Pagination: pagination,
-	  })
+	})
 }
 
 func (h *Handler) GetCourseById(c *gin.Context) {
@@ -54,11 +54,10 @@ func (h *Handler) GetCourseById(c *gin.Context) {
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
-	
-	c.JSON(http.StatusOK, dtos.GetCourseById) {
+
+	c.JSON(http.StatusOK, dtos.GetCourseById{
 		Data: course,
-		Pagination: pagination
-	}
+	})
 }
 
 func (h *Handler) DeleteCourse(c *gin.Context) {
