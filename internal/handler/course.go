@@ -8,6 +8,7 @@ import (
 
 func (h *Handler) CreateCourse(c *gin.Context) {
 
+
 }
 
 func (h *Handler) GetCourses(c *gin.Context) {

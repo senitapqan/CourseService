@@ -24,8 +24,35 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		teach.Use(h.userIdentify())
 		teach.Use(h.roleIdentify(teacherCtx))
-		teach.POST("")
-	} 	
+		course := teach.Group("/course") 
+		{
+			course.POST("", h.CreateCourse)
+			course.DELETE("/:id", h.DeleteCourse)
+			course.PUT("/:id", h.UpdateCourse)
+		}
+		plan := teach.Group("/plan")
+		{
+			plan.POST("", h.CreatePlan)
+			plan.DELETE("/:id", h.DeleteCourse)
+			plan.PUT("/:id", h.UpdatePlan)
+		}
+		material := teach.Group("/matrial")
+		{
+			material.POST("", h.CreateMaterial)
+			material.DELETE("/:id", h.DeleteMaterial)
+			material.PUT("/:id", h.UpdateMaterial)
+		}
+	} 
+	router.GET("/", h.GetCourses)
+	router.GET("/:id", h.GetCourseById)	
+
+	course := router.Group("/course")
+	{
+		teach.Use(h.userIdentify())
+		course.GET("/:id", h.GetPlans)
+		course.GET("/plan/:id", h.GetPlanById)
+		course.GET("/matrials/:id", h.GetMaterials)
+	}
 
 	return router
 }

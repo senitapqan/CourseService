@@ -45,6 +45,8 @@ func (h *Handler) userIdentify() gin.HandlerFunc {
 			c.Next()
 		}
 
+
+
 		if err != nil {
 			newErrorResponse(c, http.StatusUnauthorized, err.Error())
 			return
@@ -57,9 +59,9 @@ func (h *Handler) userIdentify() gin.HandlerFunc {
 
 func (h *Handler) HeaderUpdate(user dtos.User, c *gin.Context) {
 	c.Request.Header.Add(userCtx, strconv.Itoa(user.UserId))
-		for _, role := range user.Roles {
-			c.Request.Header.Add(role.Name, strconv.Itoa(role.Id))
-		}	
+	for _, role := range user.Roles {
+		c.Request.Header.Add(role.Name, strconv.Itoa(role.Id))
+	}	
 }
 
 func (h *Handler) roleIdentify(role string) gin.HandlerFunc {
