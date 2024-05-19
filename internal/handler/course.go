@@ -54,11 +54,7 @@ func (h *Handler) GetCourseById(c *gin.Context) {
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> 87f07d0d4f9427418879e038c1e7bcb4b208cf50
 	c.JSON(http.StatusOK, dtos.GetCourseById{
 		Data: course,
 	})
