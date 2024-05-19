@@ -1,6 +1,5 @@
 package dtos
 
-
 type Course struct {
 	Id              int
 	Title           string
@@ -12,6 +11,11 @@ type Course struct {
 }
 
 type GetAllCoursesResponse struct {
-	Data       []Course  `json:"data"`
+	Data       []Course   `json:"data"`
+	Pagination Pagination `json:"pagination"`
+}
+
+type GetCourseById struct {
+	Data       Course     `json:"data"`
 	Pagination Pagination `json:"pagination"`
 }
