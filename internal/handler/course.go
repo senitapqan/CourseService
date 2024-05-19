@@ -55,10 +55,9 @@ func (h *Handler) GetCourseById(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	
-	c.JSON(http.StatusOK, dtos.GetCourseById) {
+	c.JSON(http.StatusOK, dtos.GetCourseById{
 		Data: course,
-		Pagination: pagination
-	}
+	})
 }
 
 func (h *Handler) DeleteCourse(c *gin.Context) {
