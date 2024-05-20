@@ -50,7 +50,7 @@ func (r *CourseRepository) GetCourses(page, limit int) ([]dtos.Course, dtos.Pagi
 	}
 
 	query = fmt.Sprintf(`select count(*) from %s c
-			where c.draft = false`, consts.CourseTable)
+			where c.draft = true`, consts.CourseTable)
 
 	var totalRows int
 	err = r.db.Get(&totalRows, query)
