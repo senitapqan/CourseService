@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"goCourseService/consts"
 	"goCourseService/dtos"
 	"net/http"
 	"strconv"
@@ -38,14 +39,15 @@ func (h *Handler) userIdentify() gin.HandlerFunc {
 			return
 		}
 
-		user, err := h.service.GetUserFromCacheWithToken(headerParts[1])
+		/*
+			user, err := h.service.GetUserFromCacheWithToken(headerParts[1])
 
-		if err == nil {
-			h.HeaderUpdate(user, c)
-			c.Next()
-		}
-
-		
+			if err == nil {
+				h.HeaderUpdate(user, c)
+				c.Next()
+			}
+		*/
+		user, err := h.sendParseTokenRequest(consts.AuthServiceHost, consts.AuthServicePort, headerParts[1])
 
 		if err != nil {
 			newErrorResponse(c, http.StatusUnauthorized, err.Error())
@@ -58,10 +60,11 @@ func (h *Handler) userIdentify() gin.HandlerFunc {
 }
 
 func (h *Handler) HeaderUpdate(user dtos.User, c *gin.Context) {
+	c.Set("email", user.Email)
 	c.Request.Header.Add(userCtx, strconv.Itoa(user.UserId))
 	for _, role := range user.Roles {
 		c.Request.Header.Add(role.Name, strconv.Itoa(role.Id))
-	}	
+	}
 }
 
 func (h *Handler) roleIdentify(role string) gin.HandlerFunc {
@@ -78,7 +81,6 @@ func (h *Handler) roleIdentify(role string) gin.HandlerFunc {
 	}
 }
 
-
 func getId(c *gin.Context, header string) (int, error) {
 	id := c.GetHeader(header)
 	if id == "" {
@@ -93,7 +95,6 @@ func getId(c *gin.Context, header string) (int, error) {
 	log.Info().Msg(fmt.Sprintf("%d", intId))
 	return intId, nil
 }
-
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {

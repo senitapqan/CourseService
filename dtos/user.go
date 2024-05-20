@@ -1,12 +1,12 @@
 package dtos
 
 type User struct {
-	UserId int
-	Roles  []Role
-	Email  string
+	UserId int    `json:"user_id"`
+	Roles  []Role `json:"roles"`
+	Email  string `json:"email"`
 }
 
 type Role struct {
-	Id   int
-	Name string
+	Id   int    `json:"Id"`
+	Name string `json:"Role"`
 }

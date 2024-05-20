@@ -35,3 +35,7 @@ func (s *CourseService) UpdateCourse(input models.Course, courseId int) error {
 func (s *CourseService) DeleteCourse(courseId int) error {
 	return s.repos.DeleteCourse(courseId)
 }
+
+func (s *CourseService) RegisterForCourse(clientId, courseId int, email string) error {
+	return s.repos.RegisterForCourse(clientId, courseId, email)
+}

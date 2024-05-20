@@ -33,13 +33,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		plan := teach.Group("/plan")
 		{
-			plan.POST("", h.CreatePlan)
+			plan.POST("/:id", h.CreatePlan)
 			plan.DELETE("/:id", h.DeleteCourse)
 			plan.PUT("/:id", h.UpdatePlan)
 		}
 		material := teach.Group("/matrial")
 		{
-			material.POST("", h.CreateMaterial)
+			material.POST("/:id", h.CreateMaterial)
 			material.DELETE("/:id", h.DeleteMaterial)
 			material.PUT("/:id", h.UpdateMaterial)
 		}
@@ -49,11 +49,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	course := router.Group("/course")
 	{
-		teach.Use(h.userIdentify())
+		course.Use(h.userIdentify())
 		course.GET("/:id", h.GetPlans)
 		course.GET("/plan/:id", h.GetPlanById)
 		course.GET("/matrials/:id", h.GetMaterials)
+		course.POST("/register/:id", h.RegisterForCourse)
 	}
+
+
 
 	return router
 }

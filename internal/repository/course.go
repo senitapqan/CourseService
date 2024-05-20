@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
+	"github.com/rs/zerolog/log"
 )
 
 type CourseRepository struct {
@@ -25,7 +26,7 @@ func NewCourseRepository(db *sqlx.DB, rdb *redis.Client) *CourseRepository {
 func (r *CourseRepository) CreateCourse(input models.Course, teacherId int) (int, error) {
 	var courseId int
 	query := fmt.Sprintf(`insert into %s (title, subtitle, description, teacher_id, teacher_full_name) 
-		values($1, $2, $3, $4, $5, $6) returning id`, consts.CourseTable)
+		values($1, $2, $3, $4, $5) returning id`, consts.CourseTable)
 
 	err := r.db.Get(&courseId, query, input.Title, input.Subtitle, input.Description, input.TeacherId, input.TeacherFullName)
 	if err != nil {
@@ -38,10 +39,11 @@ func (r *CourseRepository) CreateCourse(input models.Course, teacherId int) (int
 func (r *CourseRepository) GetCourses(page, limit int) ([]dtos.Course, dtos.Pagination, error) {
 	var courses []dtos.Course
 	query := fmt.Sprintf(`select c.title, c.subtitle, c.description, c.teacher_full_name from %s c
-			where c.draft = false
+			where c.draft = true
 			order by c.created_time desc
 			limit %d offset %d`, consts.CourseTable, limit, (page-1)*limit)
 
+	log.Info().Msg(query)
 	err := r.db.Select(&courses, query)
 	if err != nil {
 		return nil, dtos.Pagination{}, err
@@ -75,6 +77,14 @@ func (r *CourseRepository) UpdateCourse(input models.Course, courseId int) error
 	return nil
 }
 
-func (s *CourseRepository) DeleteCourse(courseId int) error {
+func (r *CourseRepository) DeleteCourse(courseId int) error {
 	return nil
+}
+
+func (r *CourseRepository) RegisterForCourse(clientId, courseId int, email string) error {
+	query := fmt.Sprintf("insert into %s (course_id, student_id, student_email) values($1, $2, $3)", consts.CourseStudentsTable)
+	_, err := r.db.Exec(query, courseId, clientId, email)
+
+	return err
+
 }

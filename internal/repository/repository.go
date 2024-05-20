@@ -16,6 +16,8 @@ type Course interface {
 	GetCourses(page, limit int) ([]dtos.Course, dtos.Pagination, error)
 	UpdateCourse(input models.Course, courseId int) error
 	DeleteCourse(courseId int) error
+
+	RegisterForCourse(clientId, courseId int, email string) error
 }
 
 type User interface {

@@ -2,12 +2,12 @@ package models
 
 type Course struct {
 	Id              int
-	Title           string
-	Subtitle        string
-	Description     string
-	TeacherId       int
-	TeacherFullName string
-	Price           int
+	Title           string `json:"title"`
+	Subtitle        string `json:"subtitle"`
+	Description     string `json:"description"`
+	TeacherId       int    `json:"teacher_id"`
+	TeacherFullName string `json:"teacher_full_name"`
+	Price           int    `json:"price"`
 }
 
 type Plan struct {
