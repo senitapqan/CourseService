@@ -67,8 +67,8 @@ func (r *CourseRepository) GetCourses(page, limit int) ([]dtos.Course, dtos.Pagi
 
 func (r *CourseRepository) GetCourseById(courseId int) (dtos.Course, error) {
 	var course dtos.Course
-	query := fmt.Sprintf(`select c.title, c.subtitle, c.desription, c.teacher_full_name from %s c
-			where c.draft = false and c.id = $1`, consts.CourseTable)
+	query := fmt.Sprintf(`select c.title, c.subtitle, c.description, c.teacher_id, c.teacher_full_name from %s c
+			where c.draft = true and c.id = $1`, consts.CourseTable)
 	err := r.db.Get(&course, query, courseId)
 	return course, err
 }
@@ -86,5 +86,25 @@ func (r *CourseRepository) RegisterForCourse(clientId, courseId int, email strin
 	_, err := r.db.Exec(query, courseId, clientId, email)
 
 	return err
+}
 
+func (r *CourseRepository) GetCourseFollowers(courseId int) ([]string, error) {
+	var result []string
+	query := fmt.Sprintf("select distinct student_email from %s where course_id = $1", consts.CourseStudentsTable)
+	rows, err := r.db.Query(query, courseId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var email string
+		err := rows.Scan(&email)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, email)
+	}
+
+	return result, nil
 }

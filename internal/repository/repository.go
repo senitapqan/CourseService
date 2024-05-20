@@ -18,6 +18,11 @@ type Course interface {
 	DeleteCourse(courseId int) error
 
 	RegisterForCourse(clientId, courseId int, email string) error
+	GetCourseFollowers(courseId int) ([]string, error)
+}
+
+type Plan interface {
+	CreatePlan(input models.Plan) (int, error)
 }
 
 type User interface {
@@ -27,11 +32,13 @@ type User interface {
 type Repository struct {
 	Course
 	User
+	Plan 
 }
 
 func NewRepository(db *sqlx.DB, redis *redis.Client) *Repository {
 	return &Repository{
 		Course: NewCourseRepository(db, redis),
 		User:   NewUserRepository(redis),
+		Plan:   NewPlanRepository(db, redis),
 	}
 }

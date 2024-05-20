@@ -81,6 +81,31 @@ func (h *Handler) roleIdentify(role string) gin.HandlerFunc {
 	}
 }
 
+func (h *Handler) ownerIdentify() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id, _ := getId(c, teacherCtx)
+		courseId, err := h.validator.ValidateId(c)
+		if err != nil {
+			newErrorResponse(c, http.StatusBadGateway, err.Error())
+			return
+		}
+		course, err := h.service.Course.GetCourseById(courseId)
+
+		if err != nil {
+			newErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		if id != course.TeacherId {
+			newErrorResponse(c, http.StatusServiceUnavailable, "You are not the owner of this course")
+			return
+		}
+
+		log.Info().Msg("You are owner")
+		c.Next()
+	}
+}
+
 func getId(c *gin.Context, header string) (int, error) {
 	id := c.GetHeader(header)
 	if id == "" {

@@ -33,6 +33,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		plan := teach.Group("/plan")
 		{
+			plan.Use(h.ownerIdentify())
 			plan.POST("/:id", h.CreatePlan)
 			plan.DELETE("/:id", h.DeleteCourse)
 			plan.PUT("/:id", h.UpdatePlan)

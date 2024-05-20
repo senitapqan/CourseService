@@ -39,3 +39,4 @@ func (h *Handler) sendParseTokenRequest(host, port, token string) (dtos.User, er
 
 	return result, nil
 }
+

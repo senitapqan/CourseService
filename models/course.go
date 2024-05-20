@@ -11,9 +11,9 @@ type Course struct {
 }
 
 type Plan struct {
-	Id       int
-	Title    string
-	CourseId int
+	Id       int    `json:"id" db:"id"`
+	Title    string `json:"title" db:"title" binding:"required"`
+	CourseId int    `json:"course_id" db:"course_id"`
 }
 
 type Material struct {

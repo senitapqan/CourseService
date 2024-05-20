@@ -10,6 +10,12 @@ type Course struct {
 	Price           int    `json:"price" db:"price"`
 }
 
+
+type Plan struct {
+	Id       int  `json:"id" db:"id"`
+	Title    string `json:"title" db:"title" binding:"required"`
+}
+
 type GetAllCoursesResponse struct {
 	Data       []Course   `json:"data"`
 	Pagination Pagination `json:"pagination"`

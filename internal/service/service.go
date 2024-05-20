@@ -16,6 +16,10 @@ type Course interface {
 	RegisterForCourse(clientId, courseId int, email string) error
 }
 
+type Plan interface {
+	CreatePlan(input models.Plan) (int, error)
+}
+
 type User interface {
 	GetUserFromCacheWithToken(token string) (dtos.User, error)
 }
@@ -23,11 +27,13 @@ type User interface {
 type Service struct {
 	Course
 	User
+	Plan
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Course: NewCourseService(repos.Course),
 		User:   NewUserService(repos.User),
+		Plan:   NewPlanService(repos.Plan, repos.Course),
 	}
 }
